@@ -149,7 +149,7 @@ def int_1ms():
     T_1msec += 1
     
 
-@setHook(HOOK_10MS)
+@setHook(HOOK_10MS) # Leon comment > might have to change the main part
 def main():
     ''' every 10 ms '''
     global TimeM10
@@ -280,7 +280,7 @@ def showStatus():
 
 
 def getEH(EHstr):
-    global CurFocVal, IrStep, LastEhStr, lastEH_mq, lastSync
+    global CurFocVal, IrStep, LastEhStr, lastEH_mq, lastSync, lastEH_mq_1msec # Leon > lastEH_mq_1msec
     
     toggle_Out22()
     
@@ -296,10 +296,13 @@ def getEH(EHstr):
     dT = TimeM10-lastEH_mq
     lastEH_mq = TimeM10
     
+    dT_1msec = T_1msec-lastEH_mq_1msec # Leon
+    lastEH_mq_1msec = T_1msec # Leon
+    
     if ( dT>120 ):
         dtStr = ' ---- '
     else:    
-        dtStr = ' ' + str(dT) + ' :' + str(T_1msec)
+        dtStr = ' ' + str(dT) + ' :' + str(T_1msec) + ' :' + str(dT_1msec) # Leon >  + ' :' + str(dT_1msec)
         
     if ( SyncNo > lastSync ):
         dSync = SyncNo - lastSync
