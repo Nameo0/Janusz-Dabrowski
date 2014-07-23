@@ -120,6 +120,7 @@ def startupEvent():
     writePin(OUTPUT_22, State22)
     
     CurFocVal = 0
+    LastFocVal = 0 # Leon
     
     rx(True)
     
@@ -129,6 +130,7 @@ def startupEvent():
     T_1msec = 0
     TimeM10 = 0
     lastEH_mq = 0
+    lastEH_mq_1msec = 0 # Leon
 
 
 def checkNVParams():
@@ -163,10 +165,12 @@ def everySecond():
 
     toggleLed1()
     
-    if ( TimeM10 > 3000 ):
+    if ( dTFocVal > 1000 ): # Leon -> Changed from: TimeM10 > 3000
         TimeM10 = 0
         T_1msec = 0
         lastEH_mq = 0
+        lastEH_mq_1msec = 0 # Leon
+        LastFocVal = 0 # Leon
         
             
 def showMiliSecQ():
@@ -280,12 +284,14 @@ def showStatus():
 
 
 def getEH(EHstr):
-    global CurFocVal, IrStep, LastEhStr, lastEH_mq, lastSync, lastEH_mq_1msec # Leon > lastEH_mq_1msec
+    global CurFocVal, IrStep, LastEhStr, lastEH_mq, lastSync, lastEH_mq_1msec, dT_1msec, dTFocVal # Leon > lastEH_mq_1msec, dTFocVal
     
     toggle_Out22()
     
     LastEhStr = EHstr[0:2]
+    dTFocVal = CurFocVal-LastFocVal # Leon
     CurFocVal = str2int(EHstr[0], EHstr[1])
+    LastFocVal = CurFocVal # Leon
     
     IrStep = ord(EHstr[2])
     SyncNo = ord(EHstr[3])
